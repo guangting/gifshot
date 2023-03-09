@@ -29,7 +29,30 @@
         return {
             gifWidth: Number(gifWidth.value),
             gifHeight: Number(gifHeight.value),
-            images: gifSource.value === 'images' ? ['http://i.imgur.com/2OO33vX.png', 'http://i.imgur.com/qOwVaSN.png', 'http://i.imgur.com/Vo5mFZJ.gif'] : false,
+            images: gifSource.value === 'images' ? [
+                {
+                    'src': 'http://i.imgur.com/2OO33vX.png',
+                    'text': 'First image text',
+                    styling: {
+                        fontWeight: 'normal',
+                        fontSize: '26px',
+                        fontFamily: 'sans-serif',
+                        fontColor: '#ff0000',
+                        textAlign: 'center',
+                        textBaseline: 'top',
+                        textXCoordinate: 50,
+                        textYCoordinate: 20
+                    }
+                },
+                {
+                    'src': 'http://i.imgur.com/qOwVaSN.png',
+                    'text': 'Second image text'
+                },
+                {
+                    'src': 'http://i.imgur.com/Vo5mFZJ.gif',
+                    'text': 'Third image text'
+                }
+            ] : false,
             video: gifSource.value === 'video' ? ['example.mp4', 'example.ogv'] : false,
             filter: filter.value,
             interval: Number(interval.value),

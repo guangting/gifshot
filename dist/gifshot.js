@@ -5,9 +5,6 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
-;(function(window, document, navigator, undefined) {
-"use strict";
-
 /*
   utils.js
   ========
@@ -1798,35 +1795,36 @@ AnimatedGIF.prototype = {
     setRepeat: function setRepeat(r) {
         this.repeat = r;
     },
-    addFrame: function addFrame(element, gifshotOptions, frameText) {
+    addFrame: function addFrame(element, gifshotOptions, frameText, styling) {
         gifshotOptions = utils.isObject(gifshotOptions) ? gifshotOptions : {};
+        styling = utils.isObject(styling) ? styling : {};
+        var newGifShotOptions = utils.mergeOptions(gifshotOptions, styling);
 
         var self = this;
         var ctx = self.ctx;
         var options = self.options;
         var width = options.gifWidth;
         var height = options.gifHeight;
-        var fontSize = utils.getFontSize(gifshotOptions);
-        var _gifshotOptions = gifshotOptions,
-            filter = _gifshotOptions.filter,
-            fontColor = _gifshotOptions.fontColor,
-            fontFamily = _gifshotOptions.fontFamily,
-            fontWeight = _gifshotOptions.fontWeight,
-            gifHeight = _gifshotOptions.gifHeight,
-            gifWidth = _gifshotOptions.gifWidth,
-            text = _gifshotOptions.text,
-            textAlign = _gifshotOptions.textAlign,
-            textBaseline = _gifshotOptions.textBaseline,
-            waterMark = _gifshotOptions.waterMark,
-            waterMarkHeight = _gifshotOptions.waterMarkHeight,
-            waterMarkWidth = _gifshotOptions.waterMarkWidth,
-            waterMarkXCoordinate = _gifshotOptions.waterMarkXCoordinate,
-            waterMarkYCoordinate = _gifshotOptions.waterMarkYCoordinate;
+        var fontSize = utils.getFontSize(newGifShotOptions);
+        var filter = newGifShotOptions.filter,
+            fontColor = newGifShotOptions.fontColor,
+            fontFamily = newGifShotOptions.fontFamily,
+            fontWeight = newGifShotOptions.fontWeight,
+            gifHeight = newGifShotOptions.gifHeight,
+            gifWidth = newGifShotOptions.gifWidth,
+            text = newGifShotOptions.text,
+            textAlign = newGifShotOptions.textAlign,
+            textBaseline = newGifShotOptions.textBaseline,
+            waterMark = newGifShotOptions.waterMark,
+            waterMarkHeight = newGifShotOptions.waterMarkHeight,
+            waterMarkWidth = newGifShotOptions.waterMarkWidth,
+            waterMarkXCoordinate = newGifShotOptions.waterMarkXCoordinate,
+            waterMarkYCoordinate = newGifShotOptions.waterMarkYCoordinate;
 
-        var textXCoordinate = gifshotOptions.textXCoordinate ? gifshotOptions.textXCoordinate : textAlign === 'left' ? 1 : textAlign === 'right' ? width : width / 2;
-        var textYCoordinate = gifshotOptions.textYCoordinate ? gifshotOptions.textYCoordinate : textBaseline === 'top' ? 1 : textBaseline === 'center' ? height / 2 : height;
+        var textXCoordinate = newGifShotOptions.textXCoordinate ? newGifShotOptions.textXCoordinate : textAlign === 'left' ? 1 : textAlign === 'right' ? width : width / 2;
+        var textYCoordinate = newGifShotOptions.textYCoordinate ? newGifShotOptions.textYCoordinate : textBaseline === 'top' ? 1 : textBaseline === 'center' ? height / 2 : height;
         var font = fontWeight + ' ' + fontSize + ' ' + fontFamily;
-        var textToUse = frameText && gifshotOptions.showFrameText ? frameText : text;
+        var textToUse = frameText && newGifShotOptions.showFrameText ? frameText : text;
         var imageData = void 0;
 
         try {
@@ -1988,6 +1986,9 @@ function existingImages() {
                 if (image.text) {
                     tempImage.text = image.text;
                 }
+                if (image.styling) {
+                    tempImage.styling = image.styling;
+                }
 
                 tempImage.onerror = function (e) {
                     var obj = void 0;
@@ -2006,7 +2007,8 @@ function existingImages() {
                     if (image.text) {
                         loadedImages[index] = {
                             img: tempImage,
-                            text: tempImage.text
+                            text: tempImage.text,
+                            styling: tempImage.styling
                         };
                     } else {
                         loadedImages[index] = tempImage;
@@ -2037,7 +2039,7 @@ function existingImages() {
         utils.each(loadedImages, function (index, loadedImage) {
             if (loadedImage) {
                 if (loadedImage.text) {
-                    ag.addFrame(loadedImage.img, options, loadedImage.text);
+                    ag.addFrame(loadedImage.img, options, loadedImage.text, loadedImage.styling);
                 } else {
                     ag.addFrame(loadedImage, options);
                 }
@@ -2534,9 +2536,9 @@ var videoStream = {
 */
 
 function stopVideoStreaming(options) {
-  options = utils.isObject(options) ? options : {};
+    options = utils.isObject(options) ? options : {};
 
-  videoStream.stopVideoStreaming(options);
+    videoStream.stopVideoStreaming(options);
 }
 
 /*
@@ -2727,49 +2729,49 @@ function existingWebcam() {
 
 // Dependencies
 function createGIF(userOptions, callback) {
-  callback = utils.isFunction(userOptions) ? userOptions : callback;
-  userOptions = utils.isObject(userOptions) ? userOptions : {};
+    callback = utils.isFunction(userOptions) ? userOptions : callback;
+    userOptions = utils.isObject(userOptions) ? userOptions : {};
 
-  if (!utils.isFunction(callback)) {
-    return;
-  }
+    if (!utils.isFunction(callback)) {
+        return;
+    }
 
-  var options = utils.mergeOptions(defaultOptions, userOptions) || {};
-  var lastCameraStream = userOptions.cameraStream;
-  var images = options.images;
-  var imagesLength = images ? images.length : 0;
-  var video = options.video;
-  var webcamVideoElement = options.webcamVideoElement;
+    var options = utils.mergeOptions(defaultOptions, userOptions) || {};
+    var lastCameraStream = userOptions.cameraStream;
+    var images = options.images;
+    var imagesLength = images ? images.length : 0;
+    var video = options.video;
+    var webcamVideoElement = options.webcamVideoElement;
 
-  options = utils.mergeOptions(options, {
-    'gifWidth': Math.floor(options.gifWidth),
-    'gifHeight': Math.floor(options.gifHeight)
-  });
-
-  // If the user would like to create a GIF from an existing image(s)
-  if (imagesLength) {
-    existingImages({
-      'images': images,
-      'imagesLength': imagesLength,
-      'callback': callback,
-      'options': options
+    options = utils.mergeOptions(options, {
+        'gifWidth': Math.floor(options.gifWidth),
+        'gifHeight': Math.floor(options.gifHeight)
     });
-  } else if (video) {
-    // If the user would like to create a GIF from an existing HTML5 video
-    existingVideo({
-      'existingVideo': video,
-      callback: callback,
-      options: options
-    });
-  } else {
-    // If the user would like to create a GIF from a webcam stream
-    existingWebcam({
-      lastCameraStream: lastCameraStream,
-      callback: callback,
-      webcamVideoElement: webcamVideoElement,
-      options: options
-    });
-  }
+
+    // If the user would like to create a GIF from an existing image(s)
+    if (imagesLength) {
+        existingImages({
+            'images': images,
+            'imagesLength': imagesLength,
+            'callback': callback,
+            'options': options
+        });
+    } else if (video) {
+        // If the user would like to create a GIF from an existing HTML5 video
+        existingVideo({
+            'existingVideo': video,
+            callback: callback,
+            options: options
+        });
+    } else {
+        // If the user would like to create a GIF from a webcam stream
+        existingWebcam({
+            lastCameraStream: lastCameraStream,
+            callback: callback,
+            webcamVideoElement: webcamVideoElement,
+            options: options
+        });
+    }
 }
 
 /*
@@ -2843,4 +2845,3 @@ if (typeof define === 'function' && define.amd) {
 } else {
     window.gifshot = API;
 }
-}(typeof window !== "undefined" ? window : {}, typeof document !== "undefined" ? document : { createElement: function() {} }, typeof window !== "undefined" ? window.navigator : {}));

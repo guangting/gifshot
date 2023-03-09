@@ -65,6 +65,9 @@ export default function existingImages (obj = {}) {
                 if(image.text) {
                     tempImage.text = image.text;
                 }
+                if(image.styling) {
+                    tempImage.styling = image.styling;
+                }
 
                 tempImage.onerror = function (e) {
                     let obj;
@@ -83,7 +86,8 @@ export default function existingImages (obj = {}) {
                     if(image.text) {
                         loadedImages[index] = {
                             img:tempImage,
-                            text: tempImage.text
+                            text: tempImage.text,
+                            styling: tempImage.styling
                         };
                     } else {
                         loadedImages[index] = tempImage;
@@ -114,7 +118,7 @@ export default function existingImages (obj = {}) {
         utils.each(loadedImages, function (index, loadedImage) {
             if (loadedImage) {
                 if(loadedImage.text) {
-                    ag.addFrame(loadedImage.img, options, loadedImage.text);
+                    ag.addFrame(loadedImage.img, options, loadedImage.text, loadedImage.styling);
                 } else {
                     ag.addFrame(loadedImage, options);
                 }

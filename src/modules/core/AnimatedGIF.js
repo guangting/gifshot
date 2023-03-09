@@ -265,15 +265,17 @@ AnimatedGIF.prototype = {
   setRepeat: function (r) {
       this.repeat = r;
   },
-  addFrame: function (element, gifshotOptions, frameText) {
+  addFrame: function (element, gifshotOptions, frameText, styling) {
       gifshotOptions = utils.isObject(gifshotOptions) ? gifshotOptions : {};
+      styling = utils.isObject(styling) ? styling : {};
+      const newGifShotOptions = utils.mergeOptions(gifshotOptions, styling);
 
       const self = this;
       const ctx = self.ctx;
       const options = self.options;
       const width = options.gifWidth;
       const height = options.gifHeight;
-      const fontSize = utils.getFontSize(gifshotOptions);
+      const fontSize = utils.getFontSize(newGifShotOptions);
       const {
           filter,
           fontColor,
@@ -289,11 +291,11 @@ AnimatedGIF.prototype = {
           waterMarkWidth,
           waterMarkXCoordinate,
           waterMarkYCoordinate
-      } = gifshotOptions;
-      const textXCoordinate = gifshotOptions.textXCoordinate ? gifshotOptions.textXCoordinate : textAlign === 'left' ? 1 : textAlign === 'right' ? width : width / 2;
-      const textYCoordinate = gifshotOptions.textYCoordinate ? gifshotOptions.textYCoordinate : textBaseline === 'top' ? 1 : textBaseline === 'center' ? height / 2 : height;
+      } = newGifShotOptions;
+      const textXCoordinate = newGifShotOptions.textXCoordinate ? newGifShotOptions.textXCoordinate : textAlign === 'left' ? 1 : textAlign === 'right' ? width : width / 2;
+      const textYCoordinate = newGifShotOptions.textYCoordinate ? newGifShotOptions.textYCoordinate : textBaseline === 'top' ? 1 : textBaseline === 'center' ? height / 2 : height;
       const font = fontWeight + ' ' + fontSize + ' ' + fontFamily;
-      const textToUse = (frameText && gifshotOptions.showFrameText) ? frameText : text;
+      const textToUse = (frameText && newGifShotOptions.showFrameText) ? frameText : text;
       let imageData;
 
 
