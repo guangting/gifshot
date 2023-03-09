@@ -1,3 +1,6 @@
+;(function(window, document, navigator, undefined) {
+"use strict";
+
 /*
   utils.js
   ========
@@ -2838,3 +2841,4 @@ if (typeof define === 'function' && define.amd) {
 } else {
     window.gifshot = API;
 }
+}(typeof window !== "undefined" ? window : {}, typeof document !== "undefined" ? document : { createElement: function() {} }, typeof window !== "undefined" ? window.navigator : {}));
