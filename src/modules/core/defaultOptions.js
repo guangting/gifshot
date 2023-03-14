@@ -35,6 +35,8 @@ const defaultOptions = {
     textBaseline: 'bottom',
     textXCoordinate: null,
     textYCoordinate: null,
+    textStrokeColor: null,
+    textStrokeWidth: 1,
     progressCallback: noop,
     completeCallback: noop,
     saveRenderingContexts: false,

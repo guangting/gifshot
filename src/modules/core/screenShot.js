@@ -45,7 +45,9 @@ const screenShot = {
             waterMarkHeight,
             waterMarkWidth,
             waterMarkXCoordinate,
-            waterMarkYCoordinate
+            waterMarkYCoordinate,
+            textStrokeColor,
+            textStrokeWidth
         } = options;
         let gifWidth = Number(options.gifWidth);
         let gifHeight = Number(options.gifHeight);
@@ -126,6 +128,11 @@ const screenShot = {
                   context.fillStyle = fontColor;
                   context.textAlign = textAlign;
                   context.textBaseline = textBaseline;
+                  if (textStrokeColor) {
+                    context.lineWidth = textStrokeWidth + 2;
+                    context.strokeStyle = textStrokeColor;
+                    context.strokeText(text, textXCoordinate, textYCoordinate);
+                  }
                   context.fillText(text, textXCoordinate, textYCoordinate);
               }
 

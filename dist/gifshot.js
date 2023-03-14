@@ -407,6 +407,8 @@ var defaultOptions = {
     textBaseline: 'bottom',
     textXCoordinate: null,
     textYCoordinate: null,
+    textStrokeColor: null,
+    textStrokeWidth: 1,
     progressCallback: noop,
     completeCallback: noop,
     saveRenderingContexts: false,
@@ -1822,7 +1824,9 @@ AnimatedGIF.prototype = {
             waterMarkHeight = newGifShotOptions.waterMarkHeight,
             waterMarkWidth = newGifShotOptions.waterMarkWidth,
             waterMarkXCoordinate = newGifShotOptions.waterMarkXCoordinate,
-            waterMarkYCoordinate = newGifShotOptions.waterMarkYCoordinate;
+            waterMarkYCoordinate = newGifShotOptions.waterMarkYCoordinate,
+            textStrokeColor = newGifShotOptions.textStrokeColor,
+            textStrokeWidth = newGifShotOptions.textStrokeWidth;
 
         var textXCoordinate = newGifShotOptions.textXCoordinate ? newGifShotOptions.textXCoordinate : textAlign === 'left' ? 1 : textAlign === 'right' ? width : width / 2;
         var textYCoordinate = newGifShotOptions.textYCoordinate ? newGifShotOptions.textYCoordinate : textBaseline === 'top' ? 1 : textBaseline === 'center' ? height / 2 : height;
@@ -1840,6 +1844,11 @@ AnimatedGIF.prototype = {
                 ctx.fillStyle = fontColor;
                 ctx.textAlign = textAlign;
                 ctx.textBaseline = textBaseline;
+                if (textStrokeColor) {
+                    ctx.lineWidth = textStrokeWidth + 2;
+                    ctx.strokeStyle = textStrokeColor;
+                    ctx.strokeText(textToUse, textXCoordinate, textYCoordinate);
+                }
                 ctx.fillText(textToUse, textXCoordinate, textYCoordinate);
             }
             if (waterMark) {
@@ -2099,7 +2108,9 @@ var screenShot = {
             waterMarkHeight = options.waterMarkHeight,
             waterMarkWidth = options.waterMarkWidth,
             waterMarkXCoordinate = options.waterMarkXCoordinate,
-            waterMarkYCoordinate = options.waterMarkYCoordinate;
+            waterMarkYCoordinate = options.waterMarkYCoordinate,
+            textStrokeColor = options.textStrokeColor,
+            textStrokeWidth = options.textStrokeWidth;
 
         var gifWidth = Number(options.gifWidth);
         var gifHeight = Number(options.gifHeight);
@@ -2180,6 +2191,11 @@ var screenShot = {
                     context.fillStyle = fontColor;
                     context.textAlign = textAlign;
                     context.textBaseline = textBaseline;
+                    if (textStrokeColor) {
+                        context.lineWidth = textStrokeWidth + 2;
+                        context.strokeStyle = textStrokeColor;
+                        context.strokeText(text, textXCoordinate, textYCoordinate);
+                    }
                     context.fillText(text, textXCoordinate, textYCoordinate);
                 }
 
@@ -2826,7 +2842,7 @@ var API = {
   'isWebCamGIFSupported': isWebCamGIFSupported,
   'isExistingVideoGIFSupported': isExistingVideoGIFSupported,
   'isExistingImagesGIFSupported': isSupported$1,
-  'VERSION': '0.4.5'
+  'VERSION': '0.4.6'
 };
 
 /*

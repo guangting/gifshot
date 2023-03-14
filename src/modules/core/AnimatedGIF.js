@@ -290,7 +290,9 @@ AnimatedGIF.prototype = {
           waterMarkHeight,
           waterMarkWidth,
           waterMarkXCoordinate,
-          waterMarkYCoordinate
+          waterMarkYCoordinate,
+          textStrokeColor,
+          textStrokeWidth
       } = newGifShotOptions;
       const textXCoordinate = newGifShotOptions.textXCoordinate ? newGifShotOptions.textXCoordinate : textAlign === 'left' ? 1 : textAlign === 'right' ? width : width / 2;
       const textYCoordinate = newGifShotOptions.textYCoordinate ? newGifShotOptions.textYCoordinate : textBaseline === 'top' ? 1 : textBaseline === 'center' ? height / 2 : height;
@@ -309,6 +311,11 @@ AnimatedGIF.prototype = {
               ctx.fillStyle = fontColor;
               ctx.textAlign = textAlign;
               ctx.textBaseline = textBaseline;
+              if (textStrokeColor) {
+                ctx.lineWidth = textStrokeWidth + 2;
+                ctx.strokeStyle = textStrokeColor;
+                ctx.strokeText(textToUse, textXCoordinate, textYCoordinate);
+              }
               ctx.fillText(textToUse, textXCoordinate, textYCoordinate);
           }
           if(waterMark) {
