@@ -254,12 +254,23 @@ AnimatedGIF.prototype = {
 
       this.generatingGIF = false;
 
-      if (utils.isFunction(callback)) {
-          bufferToString = this.bufferToString(buffer);
-          gif = 'data:image/gif;base64,' + utils.btoa(bufferToString);
+    //   if (utils.isFunction(callback)) {
+    //       bufferToString = this.bufferToString(buffer);
+    //       gif = 'data:image/gif;base64,' + utils.btoa(bufferToString);
 
-          callback(gif);
+    //       callback(gif);
+    //   }
+      var byteArrays= [];
+      for (var offset = 0; offset < buffer.length; offset += 512) {
+        var sliceOfBuffer = buffer.slice(offset, offset + 512);
+        var byteArray = new Uint8Array(sliceOfBuffer);
+        byteArrays.push(byteArray);
       }
+
+      var blob = new Blob(byteArrays, {
+        type: 'image/gif'
+      });
+      callback(blob);
   },
   // From GIF: 0 = loop forever, null = not looping, n > 0 = loop n times and stop
   setRepeat: function (r) {
